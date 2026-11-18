@@ -1,21 +1,29 @@
 modules:
   jira:issuePanel:
-    - key: ctp-jira-hello-world-panel
+    - key: ctp-panel
       resource: main
       resolver:
         function: resolver
-      viewportSize: medium
-      title: ctp-jira
+      viewportSize: large
+      title: Clear to Pay
       icon: https://developer.atlassian.com/platform/forge/images/issue-panel-icon.svg
+  jira:workflowValidator:
+    - key: ctp-paid-guard
+      name: Clear to Pay — guard the move to Paid
+      description: Blocks the transition unless Clear to Pay's verdict for this invoice is CLEARED (recomputed at transition time).
+      function: validator
   function:
     - key: resolver
       handler: index.handler
+    - key: validator
+      handler: index.validate
 resources:
   - key: main
     path: static/hello-world/build
 permissions:
   scopes:
     - read:jira-work
+    - storage:app
 app:
   runtime:
     name: nodejs24.x

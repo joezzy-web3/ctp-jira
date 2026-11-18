@@ -47,3 +47,18 @@ describe('ed25519 between the browser and Forge', () => {
     expect(() => assertNoPrivateKey({ publicKeySpkiB64: 'abc' })).not.toThrow();
   });
 });
+
+import { deliveryPayload as serverPayload } from '../src/rules/payload.js';
+import { deliveryPayload as browserPayload } from '../static/hello-world/src/payload.js';
+
+describe('browser and server sign exactly the same message', () => {
+  it('both copies of deliveryPayload produce identical bytes', () => {
+    fc.assert(
+      fc.property(fc.string(), fc.string(), fc.constantFrom('storekeeper', 'weighbridge'), fc.string(), fc.nat(), (i, d, r, s, c) => {
+        const args = { issueKey: i, deliveryId: d, role: r, signerAccountId: s, count: c };
+        expect(browserPayload(args)).toBe(serverPayload(args));
+      }),
+      { numRuns: 300 },
+    );
+  });
+});
