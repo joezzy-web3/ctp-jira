@@ -5,6 +5,7 @@
   "homepage": ".",
   "dependencies": {
     "@atlaskit/css-reset": "^6.6.2",
+    "@fontsource/creepster": "^5.3.0",
     "@forge/bridge": "7.3.0-next.12",
     "react": "^16",
     "react-dom": "^16"
