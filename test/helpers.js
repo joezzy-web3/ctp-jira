@@ -21,7 +21,7 @@ export async function newSigner(accountId, role) {
     entry: { accountId, role, keyId, publicKeySpkiB64: b64(spki), status: 'active' },
     async sign(payload) {
       const sig = await subtle.sign({ name: 'Ed25519' }, pair.privateKey, Buffer.from(payload, 'utf8'));
-      return { payload, signatureB64: b64(sig), signerAccountId: accountId, role, keyId };
+      return { payload, signatureB64: b64(sig), signerAccountId: accountId, role, keyId: this.keyId };
     },
     async signDelivery({ issueKey, deliveryId, count }) {
       return this.sign(deliveryPayload({ issueKey, deliveryId, role, signerAccountId: accountId, count }));
