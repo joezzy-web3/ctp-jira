@@ -1,38 +1,150 @@
-/* Clear to Pay panel, "standard" theme (navy and gold). Themes only change
-   these variables; they never change any rule. */
+/* Clear to Pay panel.
+   Two themes over one product. Themes only change these variables, words
+   and motion; they never change a rule. Spacing sits on a 4px grid; two
+   weights (400, 500); one accent per theme. */
+
 .ctp {
-  --navy: #10264A;
-  --gold: #E6BE4F;
-  --clear: #127A4A;
-  --held: #B98A00;
-  --seize: #C42B1C;
-  --mute: #55657C;
-  --line: #D5DCD7;
   font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
-  color: var(--navy);
   font-size: 14px;
-  padding: 4px 2px 12px;
+  line-height: 1.5;
+  background: var(--s0);
+  color: var(--t1);
+  border-radius: 8px;
+  overflow: hidden;
 }
-.head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.verdict { font-weight: 700; letter-spacing: .06em; padding: 3px 10px; border-radius: 4px; color: #fff; }
-.v-cleared { background: var(--clear); }
-.v-held { background: var(--held); }
-.v-refused, .v-seized { background: var(--seize); }
-.sub { color: var(--mute); }
-.rules { list-style: none; margin: 0 0 8px; padding: 0; }
-.rule { display: grid; grid-template-columns: 14px 1fr auto; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
-.rule code { font-size: 11px; color: var(--mute); }
-.dot { width: 10px; height: 10px; border-radius: 50%; }
-.r-pass .dot { background: var(--clear); }
-.r-hold .dot, .r-guard .dot { background: var(--held); }
-.r-fail .dot { background: var(--seize); }
-section { margin-top: 14px; }
-h3 { font-size: 13px; margin: 0 0 6px; }
-.row { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
-input, select { flex: 1 1 160px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 4px; font: inherit; }
-button { padding: 6px 12px; border: 0; border-radius: 4px; background: var(--navy); color: #fff; font: inherit; cursor: pointer; }
-button:disabled { opacity: .5; cursor: default; }
-.note { color: var(--mute); margin: 4px 0; }
-.msg { padding: 6px 10px; border-radius: 4px; }
-.msg.ok { background: #E5F2EA; color: var(--clear); }
-.msg.error { background: #FBECEA; color: var(--seize); }
+
+/* Standard theme (Codegeist): navy and gold on light neutrals. */
+.theme-standard {
+  --s0: #FFFFFF;
+  --s1: #F5F6F3;
+  --s2: #E9ECE7;
+  --ln: rgba(16, 38, 74, 0.10);
+  --t1: #10264A;
+  --t2: #55657C;
+  --t3: #8A96A8;
+  --acc: #10264A;
+  --on-acc: #FFFFFF;
+  --ok: #127A4A;
+  --hold: #B98A00;
+  --bad: #C42B1C;
+  --bar: #E6BE4F;
+}
+
+/* Kiroween theme: midnight slate; pumpkin is the one accent. */
+.theme-kiroween {
+  --s0: #15182A;
+  --s1: #1C2034;
+  --s2: #242940;
+  --ln: rgba(232, 226, 210, 0.09);
+  --t1: #ECE6D6;
+  --t2: #A9ADBD;
+  --t3: #757A8F;
+  --acc: #ECE6D6;      /* primary button: off-white with dark text */
+  --on-acc: #15182A;
+  --ok: #7FB069;
+  --hold: #D9A441;
+  --bad: #D9675A;
+  --bar: #F07A1E;      /* pumpkin, used only for the hold timer */
+}
+
+.ctp-serif, .brand-title, .theme-kiroween .verdict, .theme-kiroween .ctp h3, .theme-kiroween h3 { font-family: "IM Fell English", Georgia, serif; font-weight: 400; }
+.ctp.theme-kiroween h3 { font-size: 16px; color: var(--t1); letter-spacing: 0.01em; }
+.theme-standard .brand-title, .theme-standard .verdict { font-family: inherit; letter-spacing: 0.02em; font-weight: 500; }
+
+.ctp-scene { display: block; }
+.brand { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--s1); border-bottom: 0.5px solid var(--ln); }
+.brand-title { font-size: 20px; color: #E6BE4F; line-height: 1; }
+.theme-standard .brand-title { color: var(--t1); font-size: 16px; }
+
+.body { position: relative; padding: 16px; }
+.verdict-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.verdict { border-radius: 6px; padding: 0 8px; font-size: 16px; }
+.theme-kiroween .verdict { font-size: 18px; }
+.v-cleared { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+.v-held { background: color-mix(in srgb, var(--hold) 16%, transparent); color: var(--hold); }
+.v-seized, .v-refused { background: color-mix(in srgb, var(--bad) 16%, transparent); color: var(--bad); }
+.sound-btn { display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; font-size: 12px; color: var(--t2); margin-left: auto; }
+.icon-btn { margin-left: auto; width: 32px; height: 32px; padding: 0; display: grid; place-items: center; background: transparent; color: var(--t2); border: 0.5px solid var(--ln); border-radius: 8px; cursor: pointer; }
+
+.hold { margin: 4px 0 8px; }
+.hold-top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; margin-bottom: 8px; }
+.bar { height: 4px; border-radius: 2px; background: var(--s2); }
+.bar > div { height: 4px; border-radius: 2px; background: var(--bar); }
+
+.rules { list-style: none; margin: 8px 0 0; padding: 0; }
+.rule { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; gap: 12px; align-items: center; min-height: 36px; border-bottom: 0.5px solid var(--ln); }
+.rule:last-child { border-bottom: 0; }
+.rule code { font-size: 11px; color: var(--t3); }
+.dot { width: 8px; height: 8px; border-radius: 50%; margin-left: 4px; }
+.ico { display: grid; place-items: center; }
+.r-pass .dot { background: var(--ok); } .r-pass .ico { color: var(--ok); }
+.r-hold .dot { background: var(--hold); } .r-hold .ico { color: var(--hold); }
+.r-fail .dot { background: var(--bad); } .r-fail .ico { color: var(--bad); }
+
+section { margin-top: 16px; padding-top: 16px; border-top: 0.5px solid var(--ln); }
+.ctp h3 { font-size: 12px; line-height: 16px; font-weight: 500; color: var(--t2); margin: 0 0 8px; }
+.seals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 8px; }
+.seal { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border: 0.5px solid var(--ln); border-radius: 8px; background: var(--s1); color: var(--t2); font-size: 13px; }
+.seal.sealed { color: var(--t1); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+input, select { flex: 1 1 160px; height: 36px; padding: 0 12px; border: 0.5px solid var(--ln); border-radius: 8px; background: var(--s1); color: var(--t1); font: inherit; }
+button { height: 36px; padding: 0 16px; border: 0.5px solid var(--ln); border-radius: 8px; background: transparent; color: var(--t1); font: inherit; cursor: pointer; }
+button.primary { background: var(--acc); color: var(--on-acc); border-color: transparent; font-weight: 500; }
+button:disabled { opacity: 0.5; cursor: default; }
+.note { color: var(--t2); margin: 4px 0; }
+.note.small { font-size: 12px; color: var(--t3); }
+.pad { padding: 16px; }
+.msg { padding: 8px 12px; border-radius: 8px; margin: 8px 0; }
+.msg.ok { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+.msg.error { background: color-mix(in srgb, var(--bad) 14%, transparent); color: var(--bad); }
+
+.prefs { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 16px; padding-top: 12px; border-top: 0.5px solid var(--ln); font-size: 12px; color: var(--t3); }
+.prefs select { flex: 0 0 auto; height: 28px; font-size: 12px; }
+.seg { display: inline-flex; border: 0.5px solid var(--ln); border-radius: 8px; overflow: hidden; }
+.seg button { height: 28px; border: 0; border-radius: 0; font-size: 12px; color: var(--t2); padding: 0 12px; }
+.seg button.on { background: var(--s2); color: var(--t1); }
+
+/* Spider and cobweb (Kiroween, balanced or haunted, only when HELD or SEIZED). */
+.ctp-spider-wrap { position: absolute; top: -8px; right: 16px; width: 48px; height: 150px; pointer-events: none; z-index: 2; }
+.ctp-spider { position: absolute; right: 4px; top: 0; width: 40px; height: 120px; animation: ctp-drop 5s ease-in-out infinite alternate; }
+.ctp-legs { animation: ctp-wiggle 0.7s ease-in-out infinite alternate; transform-origin: 20px 92px; transform-box: view-box; }
+.ctp-dangle { animation: ctp-dangle 5s ease-in-out infinite alternate; transform-box: view-box; }
+.ctp-pupil { animation: ctp-look 6s ease-in-out infinite; transform-box: view-box; }
+
+/* The scene: fog, stars, cloud, ghost, lantern. */
+.ctp-fog { animation: ctp-fog 22s linear infinite alternate; }
+.ctp-fog2 { animation-duration: 31s; animation-direction: alternate-reverse; }
+.ctp-star { animation: ctp-twinkle 3s ease-in-out infinite alternate; }
+.ctp-star.s1 { animation-delay: 1s; } .ctp-star.s2 { animation-delay: 2s; }
+.ctp-cloud { animation: ctp-cloud 40s linear infinite alternate; }
+.ctp-rise { animation: ctp-rise 3.5s ease-in-out infinite alternate; transform-box: view-box; }
+.ctp-flicker { animation: ctp-flicker 0.18s steps(2) infinite alternate; }
+.seal { gap: 10px; }
+.theme-kiroween .seal { height: 44px; }
+.seal svg { flex: 0 0 auto; }
+
+/* The living flag. */
+.ctp-cloth { animation: ctp-wave 5s ease-in-out infinite; transform-origin: 20px 50px; transform-box: view-box; }
+.ctp-ghost { animation: ctp-bob 2.2s ease-in-out infinite alternate; transform-box: view-box; }
+.ctp-bat { animation: ctp-cross 7s linear infinite; transform-box: view-box; }
+.ctp-bat2 { animation-duration: 9s; animation-delay: 2.5s; }
+.ctp-wing { animation: ctp-flap 0.25s ease-in-out infinite alternate; transform-origin: 15px 7px; transform-box: fill-box; }
+
+@keyframes ctp-wave { 0%, 100% { transform: skewY(0) scaleX(1); } 50% { transform: skewY(2deg) scaleX(0.985); } }
+@keyframes ctp-bob { to { transform: translateY(-5px); } }
+@keyframes ctp-cross { 0% { transform: translate(620px, 50px) scale(0.6); opacity: 0; } 8% { opacity: 1; } 50% { transform: translate(300px, 10px) scale(0.9); opacity: 1; } 60%, 100% { transform: translate(-40px, 0) scale(0.6); opacity: 0; } }
+@keyframes ctp-flap { to { transform: scaleY(0.45); } }
+@keyframes ctp-drop { 0% { transform: translateY(-60px); } 60% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
+@keyframes ctp-wiggle { to { transform: rotate(5deg); } }
+@keyframes ctp-look { 0%, 40% { transform: translateX(0); } 50%, 80% { transform: translateX(-1.2px); } 100% { transform: translateX(0); } }
+@keyframes ctp-dangle { 0% { transform: translateY(-28px); } 60% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
+@keyframes ctp-fog { from { transform: translateX(-60px); } to { transform: translateX(60px); } }
+@keyframes ctp-twinkle { from { opacity: 0.3; } to { opacity: 1; } }
+@keyframes ctp-cloud { from { transform: translateX(30px); } to { transform: translateX(-70px); } }
+@keyframes ctp-rise { from { transform: translate(350px, 116px); opacity: 0.75; } to { transform: translate(350px, 92px); opacity: 1; } }
+@keyframes ctp-flicker { from { opacity: 0.85; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ctp-cloth, .ctp-ghost, .ctp-bat, .ctp-wing, .ctp-spider, .ctp-legs, .ctp-pupil, .ctp-dangle, .ctp-fog, .ctp-star, .ctp-cloud, .ctp-rise, .ctp-flicker { animation: none; }
+  .ctp-bat { display: none; }
+}
