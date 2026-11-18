@@ -685,3 +685,12 @@ Stated assumptions for choices the steering files leave silent (low-stakes struc
 - **scheduledTrigger notification.** Panel-only notification is the default to keep scopes minimal; posting a Jira comment would add `write:jira-work` and is optional.
 - **JSM portal scope.** The supplier portal panel may need an additional service-management scope; it will be added only if the resolver cannot operate on the request context with `read:jira-work` + `storage:app`.
 - **Open item — the unprotected-transition warning (Req 9.4).** Best-effort detection with a conservative fallback is specified; the exact Jira REST query for confirming validator attachment is the riskiest part of this design and is to be validated early in the build. If no reliable signal exists, the conservative "warn unless positively confirmed" behavior stands, with the validator as the real enforcement.
+
+## Build changes (18 Nov, during implementation)
+
+Two changes made while building, each closing an attack the design left open:
+
+1. **Counts are read from inside the signed message.** A delivery signature signs the canonical message `["ctp-delivery-v1", issueKey, deliveryId, role, signerAccountId, count]` (`src/rules/payload.js`). The engine counts a signature only if it verifies AND its message names this invoice, this delivery, the same role and the same signer, and it takes the blind count from that message. *Attack closed:* editing a stored count after signing, or reusing a signature from another invoice or delivery, breaks the signature, so it stops counting (tests: "edits a stored count after it was signed", "reuses signatures from another invoice").
+2. **Only delivery-role signatures or a buyer approval count as human clearance for rule 17.** A supplier signature never counts. *Attack closed:* a supplier signature plus an AI reading would otherwise avoid HELD_AI_READING_ONLY (test: "a supplier signature is passed off as human clearance for an AI reading").
+
+Also: the validator keeps precedence (a SEIZED invoice stays SEIZED, with REFUSED_BYPASS added), and fails closed: if the verdict cannot be computed, the move to "Paid" is refused.
