@@ -47,7 +47,8 @@
   --bar: #F07A1E;      /* pumpkin, used only for the hold timer */
 }
 
-.ctp-display, .brand-title, .theme-kiroween .verdict { font-family: "Creepster", -apple-system, sans-serif; letter-spacing: 0.03em; font-weight: 400; }
+.ctp-serif, .brand-title, .theme-kiroween .verdict, .theme-kiroween .ctp h3, .theme-kiroween h3 { font-family: "IM Fell English", Georgia, serif; font-weight: 400; }
+.ctp.theme-kiroween h3 { font-size: 16px; color: var(--t1); letter-spacing: 0.01em; }
 .theme-standard .brand-title, .theme-standard .verdict { font-family: inherit; letter-spacing: 0.02em; font-weight: 500; }
 
 .ctp-scene { display: block; }
@@ -56,7 +57,7 @@
 .theme-standard .brand-title { color: var(--t1); font-size: 16px; }
 
 .body { position: relative; padding: 16px; }
-.verdict-row { padding-right: 72px; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.verdict-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .verdict { border-radius: 6px; padding: 0 8px; font-size: 16px; }
 .theme-kiroween .verdict { font-size: 18px; }
 .v-cleared { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
@@ -65,7 +66,7 @@
 .sound-btn { display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; font-size: 12px; color: var(--t2); margin-left: auto; }
 .icon-btn { margin-left: auto; width: 32px; height: 32px; padding: 0; display: grid; place-items: center; background: transparent; color: var(--t2); border: 0.5px solid var(--ln); border-radius: 8px; cursor: pointer; }
 
-.hold { margin: 12px 0 4px; padding-right: 72px; }
+.hold { margin: 4px 0 8px; }
 .hold-top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; margin-bottom: 8px; }
 .bar { height: 4px; border-radius: 2px; background: var(--s2); }
 .bar > div { height: 4px; border-radius: 2px; background: var(--bar); }
@@ -104,10 +105,23 @@ button:disabled { opacity: 0.5; cursor: default; }
 .seg button.on { background: var(--s2); color: var(--t1); }
 
 /* Spider and cobweb (Kiroween, balanced or haunted, only when HELD or SEIZED). */
-.ctp-spider-wrap { position: absolute; top: 0; right: 0; width: 96px; height: 120px; pointer-events: none; }
-.ctp-web { position: absolute; top: 0; right: 0; }
-.ctp-spider { position: absolute; right: 40px; top: 0; width: 22px; animation: ctp-drop 4.5s ease-in-out infinite alternate; }
-.ctp-legs { animation: ctp-wiggle 0.6s ease-in-out infinite alternate; transform-origin: 11px 52px; transform-box: view-box; }
+.ctp-spider-wrap { position: absolute; top: -8px; right: 16px; width: 48px; height: 150px; pointer-events: none; z-index: 2; }
+.ctp-spider { position: absolute; right: 4px; top: 0; width: 40px; height: 120px; animation: ctp-drop 5s ease-in-out infinite alternate; }
+.ctp-legs { animation: ctp-wiggle 0.7s ease-in-out infinite alternate; transform-origin: 20px 92px; transform-box: view-box; }
+.ctp-dangle { animation: ctp-dangle 5s ease-in-out infinite alternate; transform-box: view-box; }
+.ctp-pupil { animation: ctp-look 6s ease-in-out infinite; transform-box: view-box; }
+
+/* The scene: fog, stars, cloud, ghost, lantern. */
+.ctp-fog { animation: ctp-fog 22s linear infinite alternate; }
+.ctp-fog2 { animation-duration: 31s; animation-direction: alternate-reverse; }
+.ctp-star { animation: ctp-twinkle 3s ease-in-out infinite alternate; }
+.ctp-star.s1 { animation-delay: 1s; } .ctp-star.s2 { animation-delay: 2s; }
+.ctp-cloud { animation: ctp-cloud 40s linear infinite alternate; }
+.ctp-rise { animation: ctp-rise 3.5s ease-in-out infinite alternate; transform-box: view-box; }
+.ctp-flicker { animation: ctp-flicker 0.18s steps(2) infinite alternate; }
+.seal { gap: 10px; }
+.theme-kiroween .seal { height: 44px; }
+.seal svg { flex: 0 0 auto; }
 
 /* The living flag. */
 .ctp-cloth { animation: ctp-wave 5s ease-in-out infinite; transform-origin: 20px 50px; transform-box: view-box; }
@@ -121,9 +135,16 @@ button:disabled { opacity: 0.5; cursor: default; }
 @keyframes ctp-cross { 0% { transform: translate(620px, 50px) scale(0.6); opacity: 0; } 8% { opacity: 1; } 50% { transform: translate(300px, 10px) scale(0.9); opacity: 1; } 60%, 100% { transform: translate(-40px, 0) scale(0.6); opacity: 0; } }
 @keyframes ctp-flap { to { transform: scaleY(0.45); } }
 @keyframes ctp-drop { 0% { transform: translateY(-60px); } 60% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
-@keyframes ctp-wiggle { to { transform: rotate(6deg); } }
+@keyframes ctp-wiggle { to { transform: rotate(5deg); } }
+@keyframes ctp-look { 0%, 40% { transform: translateX(0); } 50%, 80% { transform: translateX(-1.2px); } 100% { transform: translateX(0); } }
+@keyframes ctp-dangle { 0% { transform: translateY(-28px); } 60% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
+@keyframes ctp-fog { from { transform: translateX(-60px); } to { transform: translateX(60px); } }
+@keyframes ctp-twinkle { from { opacity: 0.3; } to { opacity: 1; } }
+@keyframes ctp-cloud { from { transform: translateX(30px); } to { transform: translateX(-70px); } }
+@keyframes ctp-rise { from { transform: translate(350px, 116px); opacity: 0.75; } to { transform: translate(350px, 92px); opacity: 1; } }
+@keyframes ctp-flicker { from { opacity: 0.85; } to { opacity: 1; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .ctp-cloth, .ctp-ghost, .ctp-bat, .ctp-wing, .ctp-spider, .ctp-legs { animation: none; }
+  .ctp-cloth, .ctp-ghost, .ctp-bat, .ctp-wing, .ctp-spider, .ctp-legs, .ctp-pupil, .ctp-dangle, .ctp-fog, .ctp-star, .ctp-cloud, .ctp-rise, .ctp-flicker { animation: none; }
   .ctp-bat { display: none; }
 }

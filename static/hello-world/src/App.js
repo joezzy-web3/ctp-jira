@@ -12,10 +12,11 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { events, invoke } from '@forge/bridge';
-import '@fontsource/creepster/400.css';
+import '@fontsource/im-fell-english/400.css';
+import '@fontsource/im-fell-english/400-italic.css';
 import { createKey, setKeyId, hasKey, sign } from './keys';
 import { deliveryPayload } from './payload';
-import { Flag, Scene, Spider } from './Scene';
+import { Flag, Scene, WaxSeal } from './Scene';
 import { play, startWind, stopWind } from './sound';
 import { loadPrefs, savePrefs } from './prefs';
 import { Icon } from './Icons';
@@ -142,12 +143,11 @@ export default function App() {
   const subtitle = `${state.invoice.issueKey}${state.invoice.supplierId ? ` · ${state.invoice.supplierId}` : ''}`;
   const hold = state.payableFrom && fired.includes('HELD_PAYOUT_COOL_OFF') ? holdText(state.payableFrom) : null;
   const showScene = kiro && level !== 'calm';
-  const showSpider = showScene && (verdict === 'HELD' || verdict === 'SEIZED');
 
   return (
     <div className={rootClass}>
       {showScene ? (
-        <Scene title="Clear to Pay" subtitle={subtitle} haunted={level === 'haunted'} />
+        <Scene verdict={verdict} line={spooky ? line[1] : line[0]} subtitle={subtitle} haunted={level === 'haunted'} />
       ) : (
         <header className="brand">
           <Flag alive={kiro} size={30} />
@@ -159,12 +159,11 @@ export default function App() {
       )}
 
       <div className="body">
-        {showSpider && <Spider />}
 
-        <div className="verdict-row">
+        {!showScene && <div className="verdict-row">
           <span className={`verdict v-${verdict.toLowerCase()}`}>{verdict === 'CLEARED' ? 'Cleared' : verdict.charAt(0) + verdict.slice(1).toLowerCase()}</span>
           <span className="note">{spooky ? line[1] : line[0]}</span>
-        </div>
+        </div>}
         {verdict === 'CLEARED' && <p className="note">Pays only {state.payoutAccount}</p>}
 
         {hold && (
@@ -175,11 +174,11 @@ export default function App() {
         )}
 
         <ul className="rules">
-          {RULES.map(([code, plain, ghostly, icon]) => {
+          {RULES.map(([code, plain, ghostly]) => {
             const s = ruleStatus(code, fired, verdict);
             return (
               <li key={code} className={`rule r-${s}`}>
-                {kiro ? <span className="ico"><Icon name={icon} /></span> : <span className="dot" aria-hidden="true" />}
+                <span className="ico"><Icon name={s === 'pass' ? 'pass' : s === 'hold' ? 'wait' : 'fail'} /></span>
                 <span>{spooky ? ghostly : plain}</span>
                 <code>{code}</code>
               </li>
@@ -194,7 +193,7 @@ export default function App() {
           <div className="seals">
             {['storekeeper', 'weighbridge'].map((r) => (
               <div key={r} className={`seal ${state.signedRoles.includes(r) ? 'sealed' : ''}`}>
-                <span aria-hidden="true">{state.signedRoles.includes(r) ? '◆' : '◇'}</span>
+                <WaxSeal sealed={state.signedRoles.includes(r)} size={kiro ? 26 : 20} />
                 {r === 'storekeeper' ? 'Storekeeper' : 'Weighbridge'} · {state.signedRoles.includes(r) ? 'sealed' : 'waiting'}
               </div>
             ))}
